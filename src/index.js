@@ -73,7 +73,6 @@ export default class extends React.Component {
      */
     getElement(fieldName) {
         let element;
-        // console.log('metadata', this.state.meta);
         if (this.state.inputTypes.includes(this.state.meta.types[fieldName].toLowerCase())) {
             element = this.getInputElement(fieldName);
         } else if (this.state.meta.types[fieldName].toLowerCase() === 'textarea') {
