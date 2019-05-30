@@ -5,11 +5,25 @@ export default class extends React.Component {
     constructor(props) {
         super(props);
         this.state = Object.assign({}, this.props);
-        this.state.meta = this.state.meta || { fields: [], labels: {}, css: {}, types: {}, placeholders: {} }; // assign or initialize metadata
+        this.initializeMetaInState()// assign or initialize metadata
         this.state.values = this.state.meta.attributes || {}; //default values of form elements
         this.state.inputTypes = ['text', 'number', 'password']; // A list of types of input whose elements will be created through this.getInputElement functio
         this.onChange = this.onChange.bind(this); // bind onChange function to this context
         this.onSubmit = this.onSubmit.bind(this); // bind onSubmit function to this context
+    }
+
+    /**
+     * this function initializes the meta in state
+     */
+    initializeMetaInState(){
+        this.state.meta = this.state.meta || {};
+        this.state.meta.fields = this.state.meta.fields != undefined ? Array.isArray(this.state.meta.fields) === true ? this.state.meta.fields : [this.state.meta.fields] : [];
+        this.state.meta.labels = Object.assign({}, this.state.meta.labels);
+        this.state.meta.types = Object.assign({}, this.state.meta.types);
+        this.state.meta.placeholders = Object.assign({}, this.state.meta.placeholders);
+        this.state.meta.css = Object.assign({}, this.state.meta.css);
+        this.state.meta.options = this.state.meta.options != undefined ? Array.isArray(this.state.meta.options) === true ? this.state.meta.options : [this.state.meta.options] : [];
+        this.state.values = Object.assign({}, this.state.attributes);
     }
     
     render() {
@@ -22,12 +36,70 @@ export default class extends React.Component {
      * @returns {JSX}
      */
     renderForm() {
+        this.initializeEmptyMetaAttributes();
         return this.getFormElementWrapper((<form onSubmit={this.onSubmit} className={this.getFormElementCSS()}>
             {this.state.meta.fields.map(field => {
+                this.setEmptyMetaOfField(field);
                 return this.getElement(field);
             })}
             {this.getSubmitButtonElementWrapper(this.getSubmitButtonElement())}
         </form>));
+    }
+
+    /**
+     * this function falls back to some default behavior to fill up the empty
+     * data of meta about a field
+     * The types of meta which are handled are 'types', 'labels', 'placeholders'
+     * If it can't find values of above attributes in meta about this field, it tries to guess it
+     * through some methods which are
+     * 1- function parseLabelFromFieldName for labels
+     * 2- function parsePlaceholderFromFieldName for placeholder
+     * 3- function getDefaultType for type
+     * @param {String} fieldName 
+     */
+    setEmptyMetaOfField(fieldName){
+        //if field type is missing
+        this.state.meta.types[fieldName] == undefined ? this.state.meta.types[fieldName] = this.getDefaultType() : undefined;
+        //if field label is missing
+        this.state.meta.labels[fieldName] == undefined ? this.state.meta.labels[fieldName] = this.parseLabelFromFieldName(fieldName) : undefined;
+        //if field placeholder is missing
+        this.state.meta.placeholders[fieldName] == undefined ? this.state.meta.placeholders[fieldName] = this.parsePlaceholderFromFieldName(fieldName) : undefined;
+    }
+
+    /**
+     * this function parses Label from field name
+     * by default it just returns that field name but you can override it
+     * to fit your need
+     * @param {String} fieldName 
+     */
+    parseLabelFromFieldName(fieldName){
+        return fieldName;
+    }
+
+    /**
+     * this function parses placeholder value from field name
+     * you can overrride it to fit your need
+     * @param {String} fieldName 
+     */
+    parsePlaceholderFromFieldName(fieldName){
+        return `Write ${fieldName} here ...`;
+    }
+
+    initializeEmptyMetaAttributes(){
+        //if fields array is missing
+        this.state.meta.fields = this.state.meta.fields != undefined ? Array.isArray(this.state.meta.fields) === true ? this.state.meta.fields : [this.state.meta.fields] : [];
+        //if types object is missing
+        this.state.meta.types = Object.assign({}, this.state.meta.types);
+        //if labels object is missing
+        this.state.meta.labels = Object.assign({}, this.state.meta.labels);
+        //if placeholders object is missing
+        this.state.meta.placeholders = Object.assign({}, this.state.meta.placeholders);
+        //if options object is missing
+        this.state.meta.options = Object.assign({}, this.state.meta.options);
+        //if css object is missing
+        this.state.meta.css = Object.assign({}, this.state.meta.css);
+        //if attributes objects is missing
+        this.state.meta.attributes = Object.assign({}, this.state.meta.attributes);
     }
 
     /**
@@ -127,6 +199,15 @@ export default class extends React.Component {
         }
         let labelElement = this.getLabelElementWrapper(this.getLabelElement(fieldName));
         return this.getGroupLabelAndElementWrapper(this.groupLabelAndElement(labelElement, element, fieldName));
+    }
+
+    /**
+     * this function returns default type of input element if none provided
+     * @param {String} fieldName 
+     * @returns {String}
+     */
+    getDefaultType(fieldName){
+       return 'text'; 
     }
     
     /**
@@ -439,7 +520,7 @@ export default class extends React.Component {
                 className={this.state.meta.css[fieldName] || this.getSelectCSS()}
                 onChange={this.onChange}
             >
-                {this.state.meta.options[fieldName].map(option => (<option value={option.value} key={'option-' + option.name}>{option.name}</option>))}
+                {this.state.meta.options[fieldName] && this.state.meta.options[fieldName].map(option => (<option value={option.value} key={'option-' + option.name}>{option.name}</option>))}
             </select>
         );
     }
