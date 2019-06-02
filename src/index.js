@@ -118,6 +118,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getFormElementWrapper wraps the form element in some other JSX and returns it
+     * By default it does nothing except return the same incoming form element
+     * If you want to have your own wrapper that always wraps every form element then
+     * override this function
      * 
      * @param {JSX} formElement
      * @returns {JSX} 
@@ -176,6 +180,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getSubmitButtonElementWrapper wraps the submit button element in some other JSX and returns it
+     * By default it does nothing except return the same incoming button element
+     * If you want to have your own wrapper that always wraps every submit button element of a form then
+     * override this function
      * 
      * @param {JSX} submitButtonElement
      * @returns {JSX} 
@@ -243,6 +251,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getGroupLabelAndElementWrapper wraps the group of label and input element in some other JSX and returns it
+     * By default it does nothing except return the same incoming group element
+     * If you want to have your own wrapper that always wraps every group element then
+     * override this function
      * 
      * @param {JSX} groupElement
      * @returns {JSX} 
@@ -268,6 +280,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getLabelElementWrapper wraps the label element in some other JSX and returns it
+     * By default it does nothing except return the same incoming label element
+     * If you want to have your own wrapper that always wraps every label element then
+     * override this function
      * 
      * @param {JSX} labelElement
      * @returns {JSX} 
@@ -298,6 +314,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getInputElementWrapper wraps the input element in some other JSX and returns it
+     * By default it does nothing except return the same incoming input element
+     * If you want to have your own wrapper that always wraps every input element then
+     * override this function
      * 
      * @param {JSX} inputElement
      * @returns {JSX} 
@@ -316,6 +336,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getRadioElementsWrapper wraps the radio input elements passed as parameter in some other JSX and returns it
+     * By default it does nothing except return the same incoming radio input elements array
+     * If you want to have your own wrapper that always wraps radio input elements group then
+     * override this function
      * 
      * @param {Array} radioElements an array of JSX radio elements
      * @returns {JSX | Array} 
@@ -343,6 +367,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getRadioElementWrapper wraps the radio input element in some other JSX and returns it
+     * By default it does nothing except return the same incoming radio input element
+     * If you want to have your own wrapper that always wraps every radio input element then
+     * override this function
      * 
      * @param {JSX} radioElement
      * @returns {JSX} 
@@ -368,6 +396,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getCheckboxElementWrapper wraps the checkbox input element in some other JSX and returns it
+     * By default it does nothing except return the same incoming checkbox input element
+     * If you want to have your own wrapper that always wraps every checkbox input element then
+     * override this function
      * 
      * @param {JSX} checkboxElement 
      * @returns {JSX}
@@ -397,6 +429,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getRadioInputElementWrapper wraps the radio input element in some other JSX and returns it
+     * By default it does nothing except return the same incoming radio input element
+     * If you want to have your own wrapper that always wraps every radio input element then
+     * override this function
      * 
      * @param {JSX} radioInputElement
      * @returns {JSX} 
@@ -424,6 +460,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getCheckboxInputElementWrapper wraps the checkbox input element in some other JSX and returns it
+     * By default it does nothing except return the same incoming checkbox input element
+     * If you want to have your own wrapper that always wraps every checkbox input element then
+     * override this function
      * 
      * @param {JSX} checkboxInputElement
      * @returns {JSX} 
@@ -451,6 +491,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getRadioLabelElementWrapper wraps the radio label element in some other JSX and returns it
+     * By default it does nothing except return the same incoming radio label element
+     * If you want to have your own wrapper that always wraps every radio label element then
+     * override this function
      * 
      * @param {JSX} radioLabelElement
      * @returns {JSX} 
@@ -477,6 +521,10 @@ export default class extends React.Component {
     }
 
     /**
+     * getCheckboxLabelElementWrapper wraps the checkbox label element in some other JSX and returns it
+     * By default it does nothing except return the same incoming checkbox label element
+     * If you want to have your own wrapper that always wraps every checkbox label element then
+     * override this function
      * 
      * @param {JSX} checkboxLabelElement
      * @returns {JSX} 
