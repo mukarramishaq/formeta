@@ -37,13 +37,28 @@ export default class extends React.Component {
      */
     renderForm() {
         this.initializeEmptyMetaAttributes();
-        return this.getFormElementWrapper((<form onSubmit={this.onSubmit} className={this.getFormElementCSS()}>
-            {this.state.meta.fields.map(field => {
-                this.setEmptyMetaOfField(field);
-                return this.getElement(field);
-            })}
-            {this.getSubmitButtonElementWrapper(this.getSubmitButtonElement())}
-        </form>));
+        return this.getFormElementWrapper(this.getFormElement(
+            <div>
+                {this.state.meta.fields.map(field => {
+                    this.setEmptyMetaOfField(field);
+                    return this.getElement(field);
+                })}
+                {this.getSubmitButtonElementWrapper(this.getSubmitButtonElement())}
+            </div>
+        ));
+    }
+
+    /**
+     * this function get form data and wraps it with JSX form element and returns it
+     * you can override it if you want to change something in element
+     * @param {JSX | Array} formData is either a JSX element or an array of JSX elements
+     * all the form head, body and footer data will be in this variable which will then be 
+     * wrapped around by form element 
+     */
+    getFormElement(formData){
+        return <form onSubmit={this.onSubmit} className={this.getFormElementCSS()}>
+            {formData}
+        </form>
     }
 
     /**
