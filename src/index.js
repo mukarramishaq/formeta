@@ -24,6 +24,7 @@ export default class extends React.Component {
         this.state.meta.css = Object.assign({}, this.state.meta.css);
         this.state.meta.options = this.state.meta.options != undefined ? Array.isArray(this.state.meta.options) === true ? this.state.meta.options : [this.state.meta.options] : [];
         this.state.values = Object.assign({}, this.state.attributes);
+        this.state.meta.layout = Object.assign({}, this.state.meta.layout);
     }
     
     render() {
@@ -37,16 +38,105 @@ export default class extends React.Component {
      */
     renderForm() {
         this.initializeEmptyMetaAttributes();
+        this.processLayout();
         return this.getFormElementWrapper(this.getFormElement(
             <div>
-                {this.state.meta.fields.map(field => {
+                {this.state.meta.layout.rows.map(row => {
+                    return <div className={this.getRowCSS()}>
+                        {row.map(field => {
+                            this.setEmptyMetaOfField(field);
+                            return <div className={this.getColumnSpanCSS(field)}>{this.getElement(field)}</div>;    
+                        })}
+                    </div>
+                })}
+                {/* {this.state.meta.fields.map(field => {
                     this.setEmptyMetaOfField(field);
                     return this.getElement(field);
-                })}
+                })} */}
                 {this.getSubmitButtonElementWrapper(this.getSubmitButtonElement())}
             </div>
         ));
     }
+
+    processLayout(){
+        //if layout object is missing from state
+        this.state.meta.layout = Object.assign({}, this.state.meta.layout);
+        this.state.meta.layout.rows = this.state.meta.layout.rows != undefined ? Array.isArray(this.state.meta.layout.rows) === true ? this.state.meta.layout.rows : [] : [];
+        //if rows array is empty then populate it with fields from meta
+        if (this.state.meta.layout.rows.length <= 0) {
+            let row = [];
+            this.state.meta.fields.map(field => {
+                this.state.meta.layout.rows.push();
+                if (row.length >= this.getDefaultNumberOfElementsPerRow()) {
+                    this.state.meta.layout.rows.push(row);
+                    row = [];
+                }
+            });
+        }
+        this.state.meta.layout.rows.map(row => {
+            row.map(field => {
+                this.state.meta.layout[field] = this.state.meta.layout[field] || {};
+                this.state.meta.layout[field].span = this.state.meta.layout[field].span || Math.round(this.getTotalNumberOfColumnsPerRow()/row.length);
+            });
+        });
+    }
+    getTotalNumberOfColumnsPerRow(){
+        return 12;
+    }
+    getDefaultNumberOfElementsPerRow(){
+        return 1;
+    }
+    getRowCSS(){
+        return 'row';
+    }
+    getDefaultColumnSpan(){
+        return 2;
+    }
+    getColumnSpanCSS(field){
+        let span = +this.state.meta.layout[field].span;
+        span = isNaN(span) === true ? this.getDefaultColumnSpan() : span;
+        return this[`getColumnSpan${span}CSS`]();
+    }
+    getColumnSpan0CSS(){
+        return this.getColumnSpan12CSS();
+    }
+    getColumnSpan1CSS(){
+        return 'col-md-1'
+    }
+    getColumnSpan2CSS(){
+        return 'col-md-2'
+    }
+    getColumnSpan3CSS(){
+        return 'col-md-3'
+    }
+    getColumnSpan4CSS(){
+        return 'col-md-4'
+    }
+    getColumnSpan5CSS(){
+        return 'col-md-5'
+    }
+    getColumnSpan6CSS(){
+        return 'col-md-6'
+    }
+    getColumnSpan7CSS(){
+        return 'col-md-7'
+    }
+    getColumnSpan8CSS(){
+        return 'col-md-8'
+    }
+    getColumnSpan9CSS(){
+        return 'col-md-9'
+    }
+    getColumnSpan10CSS(){
+        return 'col-md-10'
+    }
+    getColumnSpan11CSS(){
+        return 'col-md-11'
+    }
+    getColumnSpan12CSS(){
+        return 'col-md-12'
+    }
+    
 
     /**
      * this function get form data and wraps it with JSX form element and returns it
