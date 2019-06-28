@@ -40,19 +40,15 @@ export default class extends React.Component {
         this.initializeEmptyMetaAttributes();
         this.processLayout();
         return this.getFormElementWrapper(this.getFormElement(
-            <div>
-                {this.state.meta.layout.rows.map(row => {
-                    return <div className={this.getRowCSS()}>
-                        {row.map(field => {
+            <div key={`form-body-${(new Date()).getTime()}`}>
+                {this.state.meta.layout.rows.map((row, rowIndex) => {
+                    return <div key={`layout-div-row-${rowIndex}`} className={this.getRowCSS()}>
+                        {row.map((field, fieldIndex) => {
                             this.setEmptyMetaOfField(field);
-                            return <div className={this.getColumnSpanCSS(field)}>{this.getElement(field)}</div>;    
+                            return <div key={`layout-div-col-${fieldIndex}-row-${rowIndex}`} className={this.getColumnSpanCSS(field)}>{this.getElement(field)}</div>;    
                         })}
                     </div>
                 })}
-                {/* {this.state.meta.fields.map(field => {
-                    this.setEmptyMetaOfField(field);
-                    return this.getElement(field);
-                })} */}
                 {this.getSubmitButtonElementWrapper(this.getSubmitButtonElement())}
             </div>
         ));
@@ -66,7 +62,7 @@ export default class extends React.Component {
         if (this.state.meta.layout.rows.length <= 0) {
             let row = [];
             this.state.meta.fields.map(field => {
-                this.state.meta.layout.rows.push();
+                row.push(field);
                 if (row.length >= this.getDefaultNumberOfElementsPerRow()) {
                     this.state.meta.layout.rows.push(row);
                     row = [];
