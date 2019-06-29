@@ -8,6 +8,9 @@ export default class extends React.Component {
         this.initializeMetaInState()// assign or initialize metadata
         this.state.values = this.state.meta.attributes || {}; //default values of form elements
         this.state.inputTypes = ['text', 'number', 'password']; // A list of types of input whose elements will be created through this.getInputElement functio
+        this.state.customInputCategories = [];
+        this.state.customInputCategoryElementGetters = {};
+        this.state.customInputCategoryElementWrapperGetters = {};
         this.onChange = this.onChange.bind(this); // bind onChange function to this context
         this.onSubmit = this.onSubmit.bind(this); // bind onSubmit function to this context
     }
@@ -305,6 +308,17 @@ export default class extends React.Component {
             element = this.getRadioElementsWrapper(this.getRadioElements(fieldName));
         } else if (this.state.meta.types[fieldName].toLowerCase() === 'checkbox') {
             return this.getCheckboxElementWrapper(this.getCheckboxElement(fieldName));
+        } else {
+            for (let i = 0; Array.isArray(this.state.customInputCategories) && i < this.state.customInputCategories.length; i++) {
+                if (this.state.customInputCategories[i].includes(this.state.meta.types[fieldName])) {
+                    let elementWrapper = this[this.state.customInputCategoryElementWrapperGetters[this.state.customInputCategories[i]]];
+                    let elementGetter = this[this.state.customInputCategoryElementGetters[this.state.customInputCategories[i]]];
+                    element = typeof elementGetter == "function" ? elementGetter(fieldName) : element;
+                    element = typeof elementWrapper == "function" ? elementWrapper(element) : element;
+                    break;
+                }
+
+            }
         }
         let labelElement = this.getLabelElementWrapper(this.getLabelElement(fieldName));
         return this.getGroupLabelAndElementWrapper(this.groupLabelAndElement(labelElement, element, fieldName));
