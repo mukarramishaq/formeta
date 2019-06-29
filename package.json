@@ -1,6 +1,6 @@
 {
   "name": "formeta",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "A React component which builds form through metadata. It is both extendable and customizable in whatever and whichever way you want it to be. ",
   "main": "build/index.js",
   "scripts": {
