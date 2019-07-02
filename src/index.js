@@ -11,8 +11,17 @@ export default class extends React.Component {
         this.state.customInputCategories = [];
         this.state.customInputCategoryElementGetters = {};
         this.state.customInputCategoryElementWrapperGetters = {};
-        this.onChange = this.onChange.bind(this); // bind onChange function to this context
-        this.onSubmit = this.onSubmit.bind(this); // bind onSubmit function to this context
+        if (this.props.onChange != undefined && typeof this.props.onChange == "function") {
+            this.onChange = this.props.onChange.bind(this);
+        } else {
+            this.onChange = this.onChange.bind(this);
+        }
+        if (this.props.onSubmit != undefined && typeof this.props.onSubmit == "function") {
+            this.onSubmit = this.props.onSubmit.bind(this);
+        } else {
+            this.onSubmit = this.onSubmit.bind(this);
+        }
+        this.getData = this.getData.bind(this);
     }
 
     /**
@@ -43,7 +52,7 @@ export default class extends React.Component {
         this.initializeEmptyMetaAttributes();
         this.processLayout();
         return this.getFormElementWrapper(this.getFormElement(
-            <div key={`form-body-${(new Date()).getTime()}`}>
+            <div>
                 {this.state.meta.layout.rows.map((row, rowIndex) => {
                     return <div key={`layout-div-row-${rowIndex}`} className={this.getRowCSS()}>
                         {row.map((field, fieldIndex) => {
@@ -78,62 +87,6 @@ export default class extends React.Component {
                 this.state.meta.layout[field].span = this.state.meta.layout[field].span || Math.round(this.getTotalNumberOfColumnsPerRow()/row.length);
             });
         });
-    }
-    getTotalNumberOfColumnsPerRow(){
-        return 12;
-    }
-    getDefaultNumberOfElementsPerRow(){
-        return 1;
-    }
-    getRowCSS(){
-        return 'row';
-    }
-    getDefaultColumnSpan(){
-        return 2;
-    }
-    getColumnSpanCSS(field){
-        let span = +this.state.meta.layout[field].span;
-        span = isNaN(span) === true ? this.getDefaultColumnSpan() : span;
-        return this[`getColumnSpan${span}CSS`]();
-    }
-    getColumnSpan0CSS(){
-        return this.getColumnSpan12CSS();
-    }
-    getColumnSpan1CSS(){
-        return 'col-md-1'
-    }
-    getColumnSpan2CSS(){
-        return 'col-md-2'
-    }
-    getColumnSpan3CSS(){
-        return 'col-md-3'
-    }
-    getColumnSpan4CSS(){
-        return 'col-md-4'
-    }
-    getColumnSpan5CSS(){
-        return 'col-md-5'
-    }
-    getColumnSpan6CSS(){
-        return 'col-md-6'
-    }
-    getColumnSpan7CSS(){
-        return 'col-md-7'
-    }
-    getColumnSpan8CSS(){
-        return 'col-md-8'
-    }
-    getColumnSpan9CSS(){
-        return 'col-md-9'
-    }
-    getColumnSpan10CSS(){
-        return 'col-md-10'
-    }
-    getColumnSpan11CSS(){
-        return 'col-md-11'
-    }
-    getColumnSpan12CSS(){
-        return 'col-md-12'
     }
     
 
@@ -177,7 +130,11 @@ export default class extends React.Component {
      * @param {String} fieldName 
      */
     parseLabelFromFieldName(fieldName){
-        return fieldName;
+        let ar = fieldName.split('_');
+        for (let i = 0; i<ar.length;i++) {
+            ar[i] = ar[i][0] != undefined ? ar[i][0].toUpperCase()+ar[i].substring(1) : ar[i];
+        }
+        return ar.join(' ');
     }
 
     /**
@@ -186,7 +143,7 @@ export default class extends React.Component {
      * @param {String} fieldName 
      */
     parsePlaceholderFromFieldName(fieldName){
-        return `Write ${fieldName} here ...`;
+        return '';
     }
 
     initializeEmptyMetaAttributes(){
@@ -821,5 +778,61 @@ export default class extends React.Component {
      */
     getFormElementCSS() {
         return 'form'
+    }
+    getTotalNumberOfColumnsPerRow(){
+        return 12;
+    }
+    getDefaultNumberOfElementsPerRow(){
+        return 1;
+    }
+    getRowCSS(){
+        return 'row';
+    }
+    getDefaultColumnSpan(){
+        return 2;
+    }
+    getColumnSpanCSS(field){
+        let span = +this.state.meta.layout[field].span;
+        span = isNaN(span) === true ? this.getDefaultColumnSpan() : span;
+        return this[`getColumnSpan${span}CSS`]();
+    }
+    getColumnSpan0CSS(){
+        return this.getColumnSpan12CSS();
+    }
+    getColumnSpan1CSS(){
+        return 'col-md-1'
+    }
+    getColumnSpan2CSS(){
+        return 'col-md-2'
+    }
+    getColumnSpan3CSS(){
+        return 'col-md-3'
+    }
+    getColumnSpan4CSS(){
+        return 'col-md-4'
+    }
+    getColumnSpan5CSS(){
+        return 'col-md-5'
+    }
+    getColumnSpan6CSS(){
+        return 'col-md-6'
+    }
+    getColumnSpan7CSS(){
+        return 'col-md-7'
+    }
+    getColumnSpan8CSS(){
+        return 'col-md-8'
+    }
+    getColumnSpan9CSS(){
+        return 'col-md-9'
+    }
+    getColumnSpan10CSS(){
+        return 'col-md-10'
+    }
+    getColumnSpan11CSS(){
+        return 'col-md-11'
+    }
+    getColumnSpan12CSS(){
+        return 'col-md-12'
     }
 }
